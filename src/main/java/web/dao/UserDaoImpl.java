@@ -1,14 +1,24 @@
 package web.dao;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import web.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Repository
 public class UserDaoImpl implements UserDao {
-    private List<User> userList;
+
+    @Autowired
+    private SessionFactory sessionFactory;
+
+/*    private List<User> userList;
 
     public static int ID = 0;
 
@@ -19,27 +29,40 @@ public class UserDaoImpl implements UserDao {
         userList.add(new User(++ID, "name23", "surname3"));
         userList.add(new User(++ID, "name4545", "surname4"));
         userList.add(new User(++ID, "name34232", "surname5"));
-    }
+    }*/
 
+    @Transactional
     public List<User> getAllUsers() {
-        return userList;
+        Session session = sessionFactory.getCurrentSession();
+        List<User> fromUser = session.createQuery("FROM User ").getResultList();
+        return fromUser;
+
     }
 
+    @Transactional
     public void saveUser(User user) {
-        userList.add(user);
+        Session session = sessionFactory.getCurrentSession();
+        session.save(user);
     }
 
-    public User getUserById (int id) {
-        return userList.stream().filter(user -> user.getId() == id).findAny().orElse(null);
+    @Transactional
+    public User getUserById(int id) {
+        Session session = sessionFactory.getCurrentSession();
+        User user = session.get(User.class, id);
+        return user;
     }
 
+    @Transactional
     public void removeUser(int id) {
-        User userToDelete = userList.stream().filter(user -> user.getId() == id).findAny().orElse(null);
-        userList.remove(userToDelete);
+        Session session = sessionFactory.getCurrentSession();
+        User user = session.get(User.class, id);
+        session.delete(user);
     }
 
+    @Transactional
     public void updateById(User updatedUser, int id) {
-        User userForUpdate = userList.stream().filter(user -> user.getId() == id).findAny().orElse(null);
+        Session session = sessionFactory.getCurrentSession();
+        User userForUpdate = session.get(User.class, id);
         userForUpdate.setName(updatedUser.getName());
         userForUpdate.setSurname(updatedUser.getSurname());
     }
