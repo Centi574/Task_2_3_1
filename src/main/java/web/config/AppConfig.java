@@ -24,7 +24,6 @@ public class AppConfig extends AbstractAnnotationConfigDispatcherServletInitiali
         return new String[]{"/"};
     }
 
-
     // добавление UTF-8 для реализации русского языка. Весь метод
     @Override
     protected Filter[] getServletFilters() {
@@ -44,5 +43,4 @@ public class AppConfig extends AbstractAnnotationConfigDispatcherServletInitiali
         aContext.addFilter("hiddenHttpMethodFilter",
                 new HiddenHttpMethodFilter()).addMappingForUrlPatterns(null, true, "/*");
     }
-
 }

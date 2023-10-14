@@ -41,7 +41,6 @@ public class WebConfig implements WebMvcConfigurer {
         this.env = env;
     }
 
-
     @Bean
     public DataSource getDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -75,7 +74,6 @@ public class WebConfig implements WebMvcConfigurer {
         transactionManager.setEntityManagerFactory(getEntityManagerFactoryBean().getObject());
         return transactionManager;
     }
-
 
     // добавление UTF-8 для реализации русского языка (templateResolver.setCharacterEncoding("UTF-8");)
     @Bean
