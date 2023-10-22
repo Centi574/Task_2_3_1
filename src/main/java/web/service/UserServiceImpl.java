@@ -1,50 +1,53 @@
 package web.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import web.dao.UserDao;
 import web.model.User;
+import web.repositories.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserDao userDao;
+    final
+    UserRepository userRepository;
 
-    @Autowired
-    public UserServiceImpl(UserDao userDao) {
-        this.userDao = userDao;
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<User> getAllUsers() {
-        return userDao.getAllUsers();
+        return userRepository.findAll();
     }
 
     @Override
     @Transactional
     public void saveUser(User user) {
-        userDao.saveUser(user);
+        userRepository.save(user);
     }
 
     @Override
     @Transactional(readOnly = true)
     public User getUserById(int id) {
-        return userDao.getUserById(id);
+        Optional<User> byId = userRepository.findById(id);
+        return byId.orElse(null);
     }
 
     @Override
     @Transactional
     public void removeUser(int id) {
-        userDao.removeUser(id);
+        userRepository.deleteById(id);
     }
 
     @Override
     @Transactional
     public void updateById(User user, int id) {
-        userDao.updateById(user, id);
+        User userForUpdate = userRepository.findById(id).orElse(null);
+        userForUpdate.setSurname(user.getSurname());
+        userForUpdate.setName(user.getName());
     }
 }

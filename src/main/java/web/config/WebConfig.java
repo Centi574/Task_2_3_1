@@ -26,7 +26,7 @@ import java.util.Properties;
 
 @Configuration
 @EnableWebMvc
-@EnableJpaRepositories("web.dao")
+@EnableJpaRepositories("web.repositories")
 @EnableTransactionManagement
 @PropertySource("classpath:db.properties")
 @ComponentScan("web")
@@ -52,7 +52,7 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean getEntityManagerFactoryBean() {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(getDataSource());
@@ -69,9 +69,9 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public PlatformTransactionManager getTransactionManager() {
+    public PlatformTransactionManager transactionManager() {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(getEntityManagerFactoryBean().getObject());
+        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
         return transactionManager;
     }
 
