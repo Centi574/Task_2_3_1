@@ -75,7 +75,6 @@ public class WebConfig implements WebMvcConfigurer {
         return transactionManager;
     }
 
-    // добавление UTF-8 для реализации русского языка (templateResolver.setCharacterEncoding("UTF-8");)
     @Bean
     public SpringResourceTemplateResolver templateResolver() {
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
